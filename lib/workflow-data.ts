@@ -391,8 +391,6 @@ export const workflows: Workflow[] = [
     ],
     cons: [
       "Slowest path — two review stages before code",
-      "Designer review is a required step — timeline depends on designer availability",
-      "Simple changes feel expensive in this flow",
       "Requires reliable Figma MCP setup",
     ],
     bestFor:
