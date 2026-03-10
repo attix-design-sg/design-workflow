@@ -97,7 +97,7 @@ export function HandoffPackage() {
         <div className="flex gap-1 rounded-lg border border-zinc-700 p-1">
           {[
             { value: "both" as const, label: "Complex (Option A)" },
-            { value: "complex-only" as const, label: "Simple (Option C)" },
+            { value: "complex-only" as const, label: "Simple (Option B)" },
           ].map((opt) => (
             <button
               key={opt.value}

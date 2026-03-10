@@ -65,7 +65,7 @@ export default function Home() {
                 dot: "bg-violet-400",
               },
               {
-                label: "Option C",
+                label: "Option B",
                 sub: "Triage by Complexity",
                 desc: "Simple features skip Figma. Complex features follow Option A. Faster for iterative work.",
                 color: "border-sky-500/20 bg-sky-500/5",
@@ -74,7 +74,7 @@ export default function Home() {
               {
                 label: "Recommendation",
                 sub: "Start with A",
-                desc: "Run Option A for your first 3–5 features. Introduce Option C once the process is familiar.",
+                desc: "Run Option A for your first 3–5 features. Introduce Option B once the process is familiar.",
                 color: "border-amber-500/20 bg-amber-500/5",
                 dot: "bg-amber-400",
               },

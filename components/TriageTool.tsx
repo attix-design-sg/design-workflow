@@ -27,7 +27,7 @@ export function TriageTool() {
   return (
     <section id="triage" className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-zinc-100">Option C — Triage Tool</h2>
+        <h2 className="text-xl font-semibold text-zinc-100">Option B — Triage Tool</h2>
         <p className="text-zinc-400 text-sm mt-1">
           Answer these questions to route your feature to Simple or Complex path.
         </p>

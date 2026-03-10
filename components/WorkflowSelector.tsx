@@ -5,7 +5,7 @@ import { WorkflowViewer } from "./WorkflowViewer";
 import { workflows } from "@/lib/workflow-data";
 
 export function WorkflowSelector() {
-  const [activeId, setActiveId] = useState<"A" | "C">("A");
+  const [activeId, setActiveId] = useState<"A" | "B">("A");
   const activeWorkflow = workflows.find((w) => w.id === activeId)!;
 
   return (
@@ -13,7 +13,7 @@ export function WorkflowSelector() {
       <div>
         <h2 className="text-xl font-semibold text-zinc-100">Workflow Options</h2>
         <p className="text-zinc-400 text-sm mt-1">
-          Start with Option A. Introduce Option C after running 3–5 features through it.
+          Start with Option A. Introduce Option B after running 3–5 features through it.
         </p>
       </div>
 
@@ -38,13 +38,13 @@ export function WorkflowSelector() {
       </div>
 
       {/* Recommendation banner */}
-      {activeId === "C" && (
+      {activeId === "B" && (
         <div className="flex items-start gap-3 rounded-xl border border-sky-500/20 bg-sky-500/5 p-4">
           <svg className="flex-shrink-0 w-5 h-5 text-sky-400 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <p className="text-sm text-sky-200/80">
-            Option C's Complex path routes to Option A exactly. When triage says Complex, flip to the Option A tab.
+            Option B's Complex path routes to Option A exactly. When triage says Complex, flip to the Option A tab.
           </p>
         </div>
       )}
@@ -54,7 +54,7 @@ export function WorkflowSelector() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <p className="text-sm text-sky-200/80">
-            <strong className="text-sky-300">Recommendation:</strong> Start here. Run 3–5 features through Option A before introducing Option C's triage gate.
+            <strong className="text-sky-300">Recommendation:</strong> Start here. Run 3–5 features through Option A before introducing Option B's triage gate.
           </p>
         </div>
       )}

@@ -20,7 +20,7 @@ export interface WorkflowPath {
 }
 
 export interface Workflow {
-  id: "A" | "C";
+  id: "A" | "B";
   name: string;
   tagline: string;
   philosophy: string;
@@ -98,12 +98,14 @@ const optionAStages: Stage[] = [
     tools: ["Figma MCP", "Claude Code"],
     input: "Approved Figma design + COMPONENTS.md + prod repo read access",
     output: "Feature branch with generated code",
-    description: "Claude pulls the approved Figma design via MCP and generates code that matches your existing codebase.",
+    description: "Claude pulls the approved Figma design via MCP and generates code that matches your existing codebase. Production repo is read via sparse checkout — only the relevant folders are pulled, not the full codebase.",
     details: [
       "Claude reads COMPONENTS.md to map Figma components → code components",
-      "Generates on a new feature branch: feature/<ticket>-<description>",
-      "Branch is in the SANDBOX repo, not production",
-      "Outputs TypeScript components with proper props",
+      "Generates on a new feature branch: feature/<ticket>-<description> in the SANDBOX repo",
+      "Sparse checkout: git clone --filter=blob:none --sparse <prod-repo> then git sparse-checkout set src/components src/styles src/types — pulls only what's needed, not the full repo",
+      "Alternative: read individual files from prod via GitHub API (no clone needed) — ask CTO for a read-only token scoped to repo:read",
+      "Shallow clone fallback: git clone --depth=1 pulls only the latest commit, no history — much faster on heavy repos",
+      "Outputs TypeScript components with proper props matching prod patterns",
     ],
   },
   {
@@ -404,8 +406,8 @@ export const workflows: Workflow[] = [
     ],
   },
   {
-    id: "C",
-    name: "Option C",
+    id: "B",
+    name: "Option B",
     tagline: "Triage by Complexity",
     philosophy:
       "Not every change needs a Figma round-trip. Route features at intake based on complexity. Simple = code fast. Complex = Option A.",
