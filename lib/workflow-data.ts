@@ -411,8 +411,8 @@ export const workflows: Workflow[] = [
       "Not every change needs a Figma round-trip. Route features at intake based on complexity. Simple = code fast. Complex = Option A.",
     pros: [
       "Fast for the 70% of work that's iterative",
-      "Figma only used when it adds real value",
-      "Saves designer time for high-impact work",
+      "Designer focus is protected for high-stakes work",
+      "Figma stays the source of truth for complex features",
       "Same CEO approval gate regardless of path",
       "Scales naturally as product matures",
       "Prod read access makes code matching much tighter",
@@ -422,7 +422,7 @@ export const workflows: Workflow[] = [
       "PM must make the triage call correctly",
       "Risk of under-triaging (skipping Figma when you shouldn't)",
       "Two different processes to train the team on",
-      "Figma may become incomplete over time on Simple path",
+      "Requires discipline to keep Figma in sync on Simple path features",
       "COMPONENTS.md must be kept current",
     ],
     bestFor:
