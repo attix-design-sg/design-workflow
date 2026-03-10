@@ -458,6 +458,7 @@ export interface SetupItem {
   steps?: string[];
   codeBlock?: { lang: string; code: string };
   priority: "must-have" | "nice-to-have";
+  requiresCTO: boolean;
 }
 
 export const setupItems: SetupItem[] = [
@@ -470,6 +471,7 @@ export const setupItems: SetupItem[] = [
     howTo:
       "Ask your CTO for a read-only deploy key (SSH) or a GitHub personal access token scoped to repo:read on the production repo.",
     priority: "must-have",
+    requiresCTO: true,
   },
   {
     id: "sandbox-repo",
@@ -484,9 +486,10 @@ export const setupItems: SetupItem[] = [
       "Connect the fork to a Vercel project (New Project → import fork)",
       "Add the sync GitHub Action below to .github/workflows/sync-fork.yml",
       "For each new feature: pull latest fork main → create feature/<ticket>-<desc> branch",
-      "Use sparse checkout on the branch to only materialize the files you need (see below) — don't delete files, the rest just won't be on disk",
+      "Use sparse checkout per feature: paste PRD + git ls-tree output into Claude → Claude identifies the relevant paths → run its output (see 'PRD as context' in the self-setup list below)",
       "Work and deploy. At handoff, the branch diff shows only what changed.",
     ],
+    requiresCTO: true,
     codeBlock: {
       lang: "yaml",
       code: `# .github/workflows/sync-fork.yml
@@ -536,6 +539,52 @@ git checkout feature/LIN-42-onboarding-redesign`,
     howTo:
       "Agree on: feature/<ticket-id>-<short-description>. Example: feature/LIN-42-onboarding-redesign. Apply in both the sandbox and production repos.",
     priority: "must-have",
+    requiresCTO: true,
+  },
+  {
+    id: "tech-stack-doc",
+    category: "Codebase",
+    label: "Tech stack details",
+    description:
+      "Claude needs your exact stack to generate matching code — framework version, CSS approach, state management, TypeScript config. Without this, generated code may not match your codebase.",
+    howTo:
+      "Ask your CTO for: Framework + version (e.g. Next.js 15 App Router), CSS approach (Tailwind version + any component library like shadcn/Radix), state management library, and the tsconfig.json + ESLint + Prettier config files. Drop these into the sandbox repo root.",
+    priority: "must-have",
+    requiresCTO: true,
+  },
+  {
+    id: "prd-context",
+    category: "Codebase",
+    label: "PRD as context for Claude — no folder map needed",
+    description:
+      "Instead of asking your CTO to maintain a folder map, give Claude your PRD and the repo's folder tree. Claude brainstorms which paths are relevant to the feature and generates the sparse checkout command for you — zero CTO overhead.",
+    howTo:
+      "Before starting a feature: run git ls-tree to get the folder structure (no files downloaded), then paste the PRD + folder tree into Claude and ask it to identify the relevant paths. Claude outputs the exact sparse-checkout command to run.",
+    steps: [
+      "Sparse-clone the sandbox (no files yet): git clone --filter=blob:none --sparse git@github.com:YOUR_ORG/YOUR_SANDBOX.git",
+      "Get the folder tree without downloading anything: git ls-tree -r HEAD --name-only src/ | head -80",
+      "Open Claude Code and paste: the feature PRD + the ls-tree output",
+      "Ask Claude: 'Based on this feature brief and folder structure, which paths should I sparse-checkout? Output the exact git sparse-checkout set command.'",
+      "Run Claude's output — working tree now contains only relevant files",
+      "Proceed with code generation on your feature branch",
+    ],
+    codeBlock: {
+      lang: "shell",
+      code: `# Step 1 — sparse clone (empty working tree, full git index)
+git clone --filter=blob:none --sparse git@github.com:YOUR_ORG/YOUR_SANDBOX.git
+cd YOUR_SANDBOX
+
+# Step 2 — get folder structure without downloading files
+git ls-tree -r HEAD --name-only src/ | head -80
+
+# Step 3 — paste PRD + above output into Claude and ask:
+# "Which of these paths are relevant to this feature? Give me the sparse-checkout command."
+
+# Step 4 — run Claude's output, e.g.:
+git sparse-checkout set src/features/onboarding src/components/forms src/components/ui src/types/user src/styles`,
+    },
+    priority: "must-have",
+    requiresCTO: false,
   },
   {
     id: "figma-access",
@@ -550,26 +599,30 @@ git checkout feature/LIN-42-onboarding-redesign`,
       code: `claude mcp add --scope user --transport http figma-remote https://mcp.figma.com/mcp`,
     },
     priority: "must-have",
+    requiresCTO: false,
   },
   {
     id: "components-md",
     category: "Codebase",
-    label: "COMPONENTS.md map in sandbox repo",
+    label: "COMPONENTS.md — Figma-to-code component map",
     description:
-      "A file that maps Figma component names to code component file paths. This is what makes Claude generate matching code instead of duplicating existing components.",
+      "A file that maps your Figma component names to their code file paths. This is what makes Claude reuse existing components instead of generating duplicates.",
     howTo:
-      "Create COMPONENTS.md in the root of your sandbox repo. Format: | Figma Name | Code Path | Props |. Start with your top 20 most-used components and grow it over time.",
+      "Create COMPONENTS.md in the sandbox repo root. You can start it yourself with the components you know from Figma, then ask your CTO or a dev to fill in the code paths. Format: | Figma Name | Code Path | Props |",
+    codeBlock: {
+      lang: "markdown",
+      code: `# COMPONENTS.md
+
+| Figma Name       | Code Path                          | Key Props                        |
+|------------------|------------------------------------|----------------------------------|
+| Button/Primary   | src/components/ui/Button.tsx       | variant, size, onClick, disabled |
+| Input/Text       | src/components/ui/Input.tsx        | label, placeholder, error        |
+| Modal            | src/components/ui/Modal.tsx        | isOpen, onClose, title           |
+| Card             | src/components/ui/Card.tsx         | padding, shadow, children        |
+| Nav/TopBar       | src/components/layout/TopBar.tsx   | user, onMenuClick                |`,
+    },
     priority: "must-have",
-  },
-  {
-    id: "tech-stack-doc",
-    category: "Codebase",
-    label: "Tech stack doc (ask your CTO)",
-    description:
-      "Claude needs to know your exact stack to generate matching code. Guessing leads to mismatches.",
-    howTo:
-      "Ask your CTO: Framework + version, CSS approach (Tailwind version? Component library?), State management, TypeScript config (share tsconfig.json), ESLint + Prettier config files.",
-    priority: "must-have",
+    requiresCTO: false,
   },
   {
     id: "vercel-team",
@@ -580,6 +633,7 @@ git checkout feature/LIN-42-onboarding-redesign`,
     howTo:
       "Go to vercel.com → New Project → Import the sandbox GitHub repo. Enable Preview Deployments. Share the Vercel team access with anyone who needs to view prototypes.",
     priority: "must-have",
+    requiresCTO: false,
   },
   {
     id: "playwright-mcp",
@@ -588,18 +642,24 @@ git checkout feature/LIN-42-onboarding-redesign`,
     description:
       "Required for the QA diff step — Claude uses Playwright to screenshot both Vercel and production URLs for comparison.",
     howTo:
-      "In Claude Code settings, connect the Playwright MCP server. No additional configuration needed beyond the connection.",
+      "Run the command below in your terminal.",
+    codeBlock: {
+      lang: "shell",
+      code: `claude mcp add --scope user playwright npx @playwright/mcp@latest`,
+    },
     priority: "must-have",
+    requiresCTO: false,
   },
   {
     id: "code-connect",
     category: "Figma",
-    label: "Code Connect (optional)",
+    label: "Code Connect (optional upgrade)",
     description:
-      "Automatically maps Figma components to code components in MCP responses. Makes Claude's code generation more precise. Requires Figma Organization plan.",
+      "Automatically maps Figma components to your codebase in MCP responses — more precise than COMPONENTS.md. Requires Figma Organization plan. Skip for now; COMPONENTS.md covers 80% of the benefit for free.",
     howTo:
-      "If you upgrade to Figma Organization: run npx @figma/code-connect in your codebase and annotate components. Until then, COMPONENTS.md is a free alternative covering ~80% of the benefit.",
+      "If you upgrade to Figma Organization: run npx @figma/code-connect in your codebase and annotate components. Discuss the plan cost with your CTO before considering this.",
     priority: "nice-to-have",
+    requiresCTO: true,
   },
 ];
 
