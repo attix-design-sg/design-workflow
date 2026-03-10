@@ -387,11 +387,11 @@ export const workflows: Workflow[] = [
       "Clear approval trail: Figma → Vercel → Live",
       "Reduces dev rework on large features",
       "Works for non-technical stakeholder review",
+      "Any Figma ↔ code drift is visible and caught early — the system flags it rather than hiding it",
     ],
     cons: [
       "Slowest path — two review stages before code",
-      "Figma ↔ code drift still possible on iteration",
-      "Designers are a dependency — blockers slow everything",
+      "Designer review is a required step — timeline depends on designer availability",
       "Simple changes feel expensive in this flow",
       "Requires reliable Figma MCP setup",
     ],
