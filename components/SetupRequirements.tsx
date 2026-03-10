@@ -3,6 +3,36 @@
 import { useState } from "react";
 import { setupItems } from "@/lib/workflow-data";
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      onClick={() => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      }}
+      className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1"
+    >
+      {copied ? (
+        <>
+          <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="text-emerald-400">Copied</span>
+        </>
+      ) : (
+        <>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          Copy
+        </>
+      )}
+    </button>
+  );
+}
+
 const categoryIcons: Record<string, React.ReactNode> = {
   "Git Access": (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -140,11 +170,39 @@ export function SetupRequirements() {
                   </div>
 
                   {isExpanded && (
-                    <div className="px-4 pb-4 pt-0 border-t border-zinc-700/40">
+                    <div className="px-4 pb-4 pt-0 border-t border-zinc-700/40 space-y-3">
                       <div className="mt-3 rounded-lg bg-zinc-900/60 border border-zinc-700/40 p-3">
                         <p className="text-xs text-zinc-500 uppercase tracking-wider mb-1.5">How to set it up</p>
                         <p className="text-sm text-zinc-300 leading-relaxed">{item.howTo}</p>
                       </div>
+
+                      {item.steps && item.steps.length > 0 && (
+                        <div className="rounded-lg bg-zinc-900/60 border border-zinc-700/40 p-3">
+                          <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Steps</p>
+                          <ol className="space-y-2">
+                            {item.steps.map((step, i) => (
+                              <li key={i} className="flex items-start gap-2.5 text-sm text-zinc-300">
+                                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-zinc-700 flex items-center justify-center text-xs text-zinc-400 font-mono mt-0.5">
+                                  {i + 1}
+                                </span>
+                                {step}
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      )}
+
+                      {item.codeBlock && (
+                        <div className="rounded-lg bg-zinc-950 border border-zinc-700/60 overflow-hidden">
+                          <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-700/60">
+                            <span className="text-xs text-zinc-500 font-mono">{item.codeBlock.lang}</span>
+                            <CopyButton text={item.codeBlock.code} />
+                          </div>
+                          <pre className="p-3 text-xs text-zinc-300 font-mono overflow-x-auto leading-relaxed whitespace-pre">
+                            {item.codeBlock.code}
+                          </pre>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

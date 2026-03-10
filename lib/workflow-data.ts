@@ -455,6 +455,8 @@ export interface SetupItem {
   label: string;
   description: string;
   howTo: string;
+  steps?: string[];
+  codeBlock?: { lang: string; code: string };
   priority: "must-have" | "nice-to-have";
 }
 
@@ -472,11 +474,57 @@ export const setupItems: SetupItem[] = [
   {
     id: "sandbox-repo",
     category: "Git Access",
-    label: "Standalone sandbox GitHub repo",
+    label: "Sandbox repo — fork of production, auto-synced",
     description:
-      "A separate GitHub repo connected to Vercel for all prototype work. Completely isolated from production — safe to deploy anything.",
+      "Fork the production repo once. This gives you a full copy that stays in sync with prod. Each feature gets its own branch off that fork — no separate repo to maintain, and the fork can be kept current automatically via GitHub Actions.",
     howTo:
-      "Create a new GitHub repo (e.g. acme-sandbox or acme-design-preview). Connect it to a Vercel project. Each branch auto-deploys to its own preview URL.",
+      "Fork the prod repo on GitHub (e.g. acme-sandbox). Connect it to Vercel. Add the GitHub Action below to auto-sync the fork's main branch with prod every weekday morning — so you're always branching from something current.",
+    steps: [
+      "Fork prod repo on GitHub → name it [product]-sandbox",
+      "Connect the fork to a Vercel project (New Project → import fork)",
+      "Add the sync GitHub Action below to .github/workflows/sync-fork.yml",
+      "For each new feature: pull latest fork main → create feature/<ticket>-<desc> branch",
+      "Use sparse checkout on the branch to only materialize the files you need (see below) — don't delete files, the rest just won't be on disk",
+      "Work and deploy. At handoff, the branch diff shows only what changed.",
+    ],
+    codeBlock: {
+      lang: "yaml",
+      code: `# .github/workflows/sync-fork.yml
+# Keeps sandbox fork in sync with prod main automatically
+
+name: Sync fork with upstream
+
+on:
+  schedule:
+    - cron: '0 9 * * 1-5'   # weekdays at 9am
+  workflow_dispatch:           # also triggerable manually
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: \${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add upstream + sync
+        run: |
+          git remote add upstream https://github.com/YOUR_ORG/YOUR_PROD_REPO.git
+          git fetch upstream
+          git checkout main
+          git merge upstream/main --no-edit
+          git push origin main
+
+---
+# Sparse checkout — run once per feature branch to keep working tree light
+# Only materializes the folders you specify; everything else stays in git but off disk
+
+git clone --filter=blob:none --sparse git@github.com:YOUR_ORG/YOUR_SANDBOX.git
+cd YOUR_SANDBOX
+git sparse-checkout set src/components src/pages/[feature] src/styles src/types
+git checkout feature/LIN-42-onboarding-redesign`,
+    },
     priority: "must-have",
   },
   {
@@ -496,7 +544,11 @@ export const setupItems: SetupItem[] = [
     description:
       "Claude needs write access to push wireframes into Figma and read access to pull approved designs.",
     howTo:
-      "In Claude Code settings, connect the Figma MCP server. Ensure your Figma account has Editor access to the project design file.",
+      "Run the command below in your terminal to connect the Figma MCP server in Claude Code. Then ensure your Figma account has Editor access to the project design file.",
+    codeBlock: {
+      lang: "shell",
+      code: `claude mcp add --scope user --transport http figma-remote https://mcp.figma.com/mcp`,
+    },
     priority: "must-have",
   },
   {
