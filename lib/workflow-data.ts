@@ -724,3 +724,183 @@ export const complexExamples = [
   "First time a UI pattern is established",
   "Anything customer-facing on first impression",
 ];
+
+// ─── WORKFLOW SPECTRUM 0–6 ────────────────────────────────────────────────────
+
+export type DevCooperation = "none" | "minimal" | "full";
+export type ApprovalFormat = "static-figma" | "live-url-low" | "live-url-high" | "live-url-coded";
+
+export interface SpectrumLevel {
+  level: number;
+  name: string;
+  tagline: string;
+  description: string;
+  devCooperation: DevCooperation;
+  carlosApproves: ApprovalFormat;
+  pros: string[];
+  cons: string[];
+  unlocks: string;
+  isTarget?: boolean;
+}
+
+export const spectrumLevels: SpectrumLevel[] = [
+  {
+    level: 0,
+    name: "No AI",
+    tagline: "Today's process",
+    description: "Design in Figma, Carlos approves static frames, dev implements from scratch. No AI involved at any stage.",
+    devCooperation: "none",
+    carlosApproves: "static-figma",
+    pros: [
+      "Familiar — no new tools or process",
+      "Zero setup cost",
+      "No dependency on dev buy-in",
+    ],
+    cons: [
+      "Carlos approves without seeing interactions",
+      "High deviation risk between design intent and live implementation",
+      "Handoff quality depends entirely on annotation effort",
+      "No automated QA — drift goes undetected",
+    ],
+    unlocks: "Nothing new — baseline only",
+  },
+  {
+    level: 1,
+    name: "AI-Assisted Design",
+    tagline: "AI speeds up Figma work",
+    description: "Use Claude or AI plugins to generate and iterate designs faster inside Figma. Approval process and handoff are unchanged.",
+    devCooperation: "none",
+    carlosApproves: "static-figma",
+    pros: [
+      "Faster design exploration and iteration",
+      "Better first drafts with less effort",
+      "No change to approval or handoff — zero risk",
+    ],
+    cons: [
+      "Carlos still approves static frames",
+      "Handoff quality unchanged",
+      "No interactive prototype",
+      "Doesn't reduce dev implementation effort",
+    ],
+    unlocks: "Faster design production",
+  },
+  {
+    level: 2,
+    name: "AI Prototype (Screenshots)",
+    tagline: "First live URL for Carlos",
+    description: "Claude generates a prototype from screenshots of your existing product. Deploy to CodeSandbox for a shareable interactive URL.",
+    devCooperation: "none",
+    carlosApproves: "live-url-low",
+    pros: [
+      "Carlos sees something interactive for the first time",
+      "Zero setup — just a browser and Claude",
+      "No dev cooperation needed",
+    ],
+    cons: [
+      "Low fidelity — Claude guesses at UI from screenshots",
+      "Code is throwaway, not reusable",
+      "Handoff quality unchanged",
+      "Prototype may mislead on what's easy vs hard to build",
+    ],
+    unlocks: "Interactive approval (low fidelity)",
+  },
+  {
+    level: 3,
+    name: "Framer AI",
+    tagline: "High-fidelity prototype, no code",
+    description: "Build interactive prototypes in Framer using AI. Share the Framer URL for approval. Designer stays in design tools.",
+    devCooperation: "none",
+    carlosApproves: "live-url-high",
+    pros: [
+      "Genuinely high-quality interactions and animations",
+      "Designer stays in a design tool — no code",
+      "Carlos gets a polished interactive experience",
+    ],
+    cons: [
+      "Framer output is not usable in production",
+      "Handoff spec still manual",
+      "Framer learning curve",
+      "No code generated for devs — still implements from scratch",
+    ],
+    unlocks: "High-fidelity interactive approval",
+  },
+  {
+    level: 4,
+    name: "AI-Enhanced Spec",
+    tagline: "Better handoff, same approval",
+    description: "Claude reads the approved Figma design and generates an exhaustive dev-ready spec. Carlos still approves static Figma frames.",
+    devCooperation: "none",
+    carlosApproves: "static-figma",
+    pros: [
+      "Dramatically better handoff — Claude documents every state, edge case, and copy string",
+      "Devs ask far fewer questions",
+      "Less implementation rework",
+      "No change to dev workflow",
+    ],
+    cons: [
+      "Carlos still approves static frames",
+      "No interactive prototype",
+      "Deviation risk between design and live remains",
+      "No automated QA",
+    ],
+    unlocks: "Significantly better handoff quality",
+  },
+  {
+    level: 5,
+    name: "Hybrid: v0 + Claude Spec",
+    tagline: "Best outcome without dev buy-in",
+    description: "Figma for design, v0/Lovable for the approval prototype, Claude generates the handoff spec. Zero dev cooperation needed for any of it.",
+    devCooperation: "minimal",
+    carlosApproves: "live-url-high",
+    pros: [
+      "Carlos approves an interactive prototype — no static frames",
+      "Claude-generated spec is the best handoff devs have ever received",
+      "Zero change to dev workflow",
+      "No repo access, no git setup needed",
+    ],
+    cons: [
+      "v0 code is throwaway — devs still implement from scratch",
+      "No QA diff — deviation between prototype and live goes unchecked",
+      "v0 prototype won't perfectly match production design system",
+      "Two tools to manage (Figma + v0)",
+    ],
+    unlocks: "Interactive approval + excellent spec, zero dev overhead",
+  },
+  {
+    level: 6,
+    name: "Full AI Workflow",
+    tagline: "Options A + B — this document",
+    description: "Complete pipeline: Figma → Claude generates production-matched code → Vercel → Carlos approves → code handoff → automated QA diff.",
+    devCooperation: "full",
+    carlosApproves: "live-url-coded",
+    pros: [
+      "Claude generates code that matches your production architecture exactly",
+      "Carlos approves a live interactive prototype — not frames, not a throwaway build",
+      "Dev implementation effort is dramatically reduced — sandbox branch is the reference",
+      "Automated QA diff catches deviation between prototype and live",
+      "Figma ↔ code drift is visible and caught early — the system surfaces it",
+      "Approval trail is fully documented: Figma → Vercel URL → live",
+    ],
+    cons: [
+      "Requires dev buy-in: read access to prod repo, fork setup, agreed branching",
+      "Setup overhead upfront (CTO list in Setup Requirements section)",
+      "Requires reliable Figma MCP connection",
+      "Ongoing: COMPONENTS.md needs to stay current",
+    ],
+    unlocks: "The complete workflow — production-matched code, interactive approval, automated QA",
+    isTarget: true,
+  },
+];
+
+export const approvalFormatLabels: Record<ApprovalFormat, string> = {
+  "static-figma": "Static Figma frames",
+  "live-url-low": "Live URL (low fidelity)",
+  "live-url-high": "Live URL (high fidelity)",
+  "live-url-coded": "Live URL (production-matched code)",
+};
+
+export const devCooperationLabels: Record<DevCooperation, string> = {
+  none: "None required",
+  minimal: "Minimal (v0 account only)",
+  full: "Full (repo access + setup)",
+};
