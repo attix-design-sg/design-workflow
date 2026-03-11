@@ -99,7 +99,7 @@ export default function Home() {
           <div className="flex items-center gap-0 flex-wrap gap-y-2">
             {[
               { role: "Designer + PM", note: "Internal review" },
-              { role: "CEO", note: "Approves Vercel URL" },
+              { role: "Carlos", note: "Approves Vercel URL" },
               { role: "Dev", note: "Implements into prod" },
               { role: "QA Diff", note: "Claude verifies Live" },
             ].map((step, i, arr) => (

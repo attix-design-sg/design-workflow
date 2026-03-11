@@ -1,4 +1,4 @@
-export type StageOwner = "PM" | "Designer" | "Designer + PM" | "CEO" | "Dev" | "Claude" | "Designer / Claude";
+export type StageOwner = "PM" | "Designer" | "Designer + PM" | "Carlos" | "Dev" | "Claude" | "Designer / Claude";
 export type StageStatus = "idle" | "active" | "gate" | "complete";
 
 export interface Stage {
@@ -145,7 +145,7 @@ const optionAStages: Stage[] = [
     tools: ["Vercel preview URL"],
     input: "Vercel preview URL",
     output: "Feedback list or green light",
-    gate: "Designer + PM must sign off before CEO sees it",
+    gate: "Designer + PM must sign off before Carlos sees it",
     description: "Designer and PM review the coded prototype against the approved Figma design.",
     details: [
       "Check: does the code match the approved Figma?",
@@ -156,16 +156,16 @@ const optionAStages: Stage[] = [
   },
   {
     id: "a-ceo-approval",
-    name: "CEO Approval",
-    owner: "CEO",
+    name: "Carlos Approval",
+    owner: "Carlos",
     tools: ["Vercel preview URL"],
     input: "Vercel preview URL (post designer/PM review)",
     output: "Approved or iterate",
-    gate: "CEO must approve before handoff is prepared",
-    description: "CEO reviews the live prototype on Vercel and approves or requests changes.",
+    gate: "Carlos must approve before handoff is prepared",
+    description: "Carlos reviews the live prototype on Vercel and approves or requests changes.",
     details: [
       "Send the Vercel URL, not screenshots",
-      "CEO should interact with it on their actual device",
+      "Carlos should interact with it on their actual device",
       "Document the approved URL + timestamp",
       "If changes requested: back to 'Refine Interactions' stage (not Figma, unless visual)",
     ],
@@ -290,7 +290,7 @@ const optionCSimpleStages: Stage[] = [
     tools: ["Vercel preview URL"],
     input: "Vercel preview URL",
     output: "Visual approval or feedback",
-    gate: "Designer must confirm visual quality before CEO sees it",
+    gate: "Designer must confirm visual quality before Carlos sees it",
     description: "Designer quickly checks the coded prototype matches product visual standards.",
     details: [
       "Not a full design review — just a visual sanity check",
@@ -300,13 +300,13 @@ const optionCSimpleStages: Stage[] = [
   },
   {
     id: "c-s-ceo",
-    name: "CEO Approval",
-    owner: "CEO",
+    name: "Carlos Approval",
+    owner: "Carlos",
     tools: ["Vercel preview URL"],
     input: "Vercel preview URL",
     output: "Approved or iterate",
-    gate: "CEO approves before handoff",
-    description: "CEO reviews and approves the prototype.",
+    gate: "Carlos approves before handoff",
+    description: "Carlos reviews and approves the prototype.",
     details: [
       "Send the URL, not screenshots",
       "Document the approved URL + timestamp",
@@ -379,9 +379,9 @@ export const workflows: Workflow[] = [
     name: "Option A",
     tagline: "Figma-First",
     philosophy:
-      "Design is the source of truth. Nothing gets coded until it's been blessed in Figma by the designer and PM. CEO approves the Vercel prototype.",
+      "Design is the source of truth. Nothing gets coded until it's been blessed in Figma by the designer and PM. Carlos approves the Vercel prototype.",
     pros: [
-      "CEO always approves something polished and visual",
+      "Carlos always approves something polished and visual",
       "Figma stays in sync with production",
       "Designer owns quality before dev touches it",
       "Clear approval trail: Figma → Vercel → Live",
@@ -394,7 +394,7 @@ export const workflows: Workflow[] = [
       "Requires reliable Figma MCP setup",
     ],
     bestFor:
-      "New feature launches, anything customer-facing with brand sensitivity, or any time the CEO needs a polished prototype before commitments are made.",
+      "New feature launches, anything customer-facing with brand sensitivity, or any time the Carlos needs a polished prototype before commitments are made.",
     paths: [
       {
         id: "a-main",
@@ -413,7 +413,7 @@ export const workflows: Workflow[] = [
       "Fast for the 70% of work that's iterative",
       "Designer focus is protected for high-stakes work",
       "Figma stays the source of truth for complex features",
-      "Same CEO approval gate regardless of path",
+      "Same Carlos approval gate regardless of path",
       "Scales naturally as product matures",
       "Prod read access makes code matching much tighter",
     ],
@@ -699,7 +699,7 @@ export const triageQuestions: TriageQuestion[] = [
   },
   {
     id: "t6",
-    question: "Does the CEO or a stakeholder care about the visual design specifically?",
+    question: "Does the Carlos or a stakeholder care about the visual design specifically?",
     ifYes: "complex",
   },
 ];

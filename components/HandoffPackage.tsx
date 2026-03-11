@@ -19,7 +19,7 @@ const handoffItems: HandoffItem[] = [
   {
     id: "h-vercel",
     label: "Vercel preview URL (approved version)",
-    description: "The exact URL that was approved by the CEO. Do NOT redeploy after approval — the URL must stay frozen as the reference. Screenshot it as a backup.",
+    description: "The exact URL that was approved by the Carlos. Do NOT redeploy after approval — the URL must stay frozen as the reference. Screenshot it as a backup.",
     path: "both",
   },
   {

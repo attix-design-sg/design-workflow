@@ -163,7 +163,7 @@ export function TriageTool() {
               <p className="text-sm text-zinc-400 max-w-md mx-auto">
                 No Figma round-trip needed. Claude generates code directly from the brief using your production repo and COMPONENTS.md.
               </p>
-              <p className="text-xs text-zinc-500 mt-2">Designer does a quick visual review before CEO approval.</p>
+              <p className="text-xs text-zinc-500 mt-2">Designer does a quick visual review before Carlos approval.</p>
             </>
           )}
           <button

@@ -7,7 +7,7 @@ const ownerColors: Record<string, string> = {
   PM: "bg-violet-500/10 text-violet-300 border-violet-500/20",
   Designer: "bg-pink-500/10 text-pink-300 border-pink-500/20",
   "Designer + PM": "bg-fuchsia-500/10 text-fuchsia-300 border-fuchsia-500/20",
-  CEO: "bg-amber-500/10 text-amber-300 border-amber-500/20",
+  Carlos: "bg-amber-500/10 text-amber-300 border-amber-500/20",
   Dev: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
   Claude: "bg-sky-500/10 text-sky-300 border-sky-500/20",
   "Designer / Claude": "bg-pink-500/10 text-pink-300 border-pink-500/20",
