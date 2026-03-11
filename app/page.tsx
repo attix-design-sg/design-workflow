@@ -61,7 +61,7 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-8 py-16 space-y-28">
 
         {/* ── HERO ───────────────────────────────────────────────────────── */}
-        <div id="overview" className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start pt-4">
           {/* Left */}
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-700/60 bg-zinc-800/40 text-xs text-zinc-400">
@@ -136,7 +136,7 @@ export default function Home() {
         </div>
 
         {/* ── SECTION 01: OVERVIEW ───────────────────────────────────────── */}
-        <div className="space-y-3">
+        <div id="overview" className="space-y-3">
           <SectionHeader num="01" label="Overview" />
           <WorkflowSpectrum />
         </div>
