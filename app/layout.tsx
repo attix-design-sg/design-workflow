@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Design Workflow — Figma to Dev",
-  description: "Figma-first and triage-based design-to-dev workflow with Claude Code, Vercel, and Playwright QA.",
+  title: "Component-First Design Handoff",
+  description: "A workflow where Figma expresses visual intent, code expresses behavioral intent, and engineering decides what ships.",
 };
 
 export default function RootLayout({

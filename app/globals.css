@@ -8,11 +8,16 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 72px; /* sticky nav height + breathing room */
+  scroll-padding-top: 24px;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(16, 185, 129, 0.2);
 }
